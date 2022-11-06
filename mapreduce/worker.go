@@ -7,6 +7,7 @@ import (
 	"net/rpc"
 	"os"
 	"sync"
+	"time"
 )
 
 // Worker holds the state for a server waiting for DoTask or Shutdown RPCs
@@ -67,6 +68,7 @@ func RunWorker(MasterAddress string, me string,
 	ReduceFunc func(string, []string) string,
 	nRPC int,
 ) {
+	time.Sleep(5*time.Second)
 	debug("RunWorker %s\n", me)
 	wk := new(Worker)
 	wk.name = me
