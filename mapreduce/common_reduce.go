@@ -1,11 +1,10 @@
 package mapreduce
 
-
 import (
 	"encoding/json"
 	"os"
-	
 )
+
 // doReduce does the job of a reduce worker: it reads the intermediate
 // key/value pairs (produced by the map phase) for this task, sorts the
 // intermediate key/value pairs by key, calls the user-defined reduce function
@@ -39,7 +38,6 @@ func doReduce(
 	// file.Close()
 	
 	
-	//implementando já em ordem(numa maneira "sorted")
 	sKV:= make(map[string][]string, 0)
 	for i := 0; i < nMap; i++{
 		

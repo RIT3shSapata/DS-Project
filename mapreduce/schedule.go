@@ -1,10 +1,9 @@
 package mapreduce
 
-import(
+import (
 	"fmt"
 	"sync"
 )
-
 
 // schedule starts and waits for all tasks in the given phase (Map or Reduce).
 func (mr *Master) schedule(phase jobPhase) {
@@ -19,18 +18,14 @@ func (mr *Master) schedule(phase jobPhase) {
 		nios = len(mr.files)
 	}
 
-	fmt.Printf("Schedule: %v %v tasks (%d I/Os)\n", ntasks, phase, nios)
+	fmt.Printf("SCHEDULING %v %v tasks (%d I/Os)\n", ntasks, phase, nios)
 
 	// All ntasks tasks have to be scheduled on workers, and only once all of
 	// them have been completed successfully should the function return.
 	// Remember that workers may fail, and that any given worker may finish
 	// multiple tasks.
-	//
-	// TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
-	//
 	
 
-	//pra sincronizar
 	var w sync.WaitGroup
 	w.Add(ntasks)
 
@@ -40,9 +35,7 @@ func (mr *Master) schedule(phase jobPhase) {
 			
 			defer w.Done()
 			for{
-				//esperando
 				work:= <- mr.registerChannel
-				//argumentos que podem variar se é map ou reduce
 				var args DoTaskArgs
 				
 				switch phase{
@@ -67,8 +60,7 @@ func (mr *Master) schedule(phase jobPhase) {
 				
 		}(i, phase) 
 	}
-	//esperar todos terminarem
 	w.Wait()
 	
-	fmt.Printf("Schedule: %v phase done\n", phase)
+	fmt.Printf("%v PHASE DONE!!!!\n", phase)
 }

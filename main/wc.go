@@ -5,7 +5,6 @@ import (
 
 	"github.com/RIT3shSapata/Map-Reduce/mapreduce"
 
-	// "mapreduce"
 	"os"
 	"strconv"
 	"strings"
@@ -17,13 +16,10 @@ import (
 // and the value is the file's contents. The return value should be a slice of
 // key/value pairs, each represented by a mapreduce.KeyValue.
 func mapF(document string, value string) (res []mapreduce.KeyValue) {
-	//aqui é um "filtro" pra usar em w (mais abaixo), que será um array
-	//de slices de s
 	f := func(c rune) bool {
 		return !unicode.IsLetter(c) && !unicode.IsNumber(c)
 	}
 	arrayW := strings.FieldsFunc(value, f)
-	//abaixo os key-values
 	kvs := make([]mapreduce.KeyValue, 0)
     for _, w := range arrayW {
         kvs = append(kvs, mapreduce.KeyValue{w, "1"})
@@ -38,7 +34,6 @@ func mapF(document string, value string) (res []mapreduce.KeyValue) {
 // should be a single output value for that key.
 func reduceF(key string, values []string) string {
 	s := len(values)
-	//converterá int para string
     return strconv.Itoa(s)
 }
 
@@ -52,9 +47,9 @@ func main() {
 	} else if os.Args[1] == "master" {
 		var mr *mapreduce.Master
 		if os.Args[2] == "sequential" {
-			mr = mapreduce.Sequential("wcseq", os.Args[3:], 3, mapF, reduceF)
+			mr = mapreduce.Sequential("wcseq", os.Args[3:], 6, mapF, reduceF)
 		} else {
-			mr = mapreduce.Distributed("wcseq", os.Args[3:], 3, os.Args[2])
+			mr = mapreduce.Distributed("wcdis", os.Args[3:], 6, os.Args[2])
 		}
 		mr.Wait()
 	} else {

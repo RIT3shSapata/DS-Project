@@ -1,10 +1,10 @@
 package mapreduce
 
 import (
+	"encoding/json"
 	"hash/fnv"
+	"io/ioutil"
 	"os"
-    "io/ioutil"
-    "encoding/json"
 )
 
 // doMap does the job of a map worker: it reads one of the input files
@@ -17,7 +17,6 @@ func doMap(
 	nReduce int, // the number of reduce task that will be run ("R" in the paper)
 	mapF func(file string, contents string) []KeyValue,
 ) {
-	// TODO:
 	// You will need to write this function.
 	// You can find the filename for this map task's input to reduce task number
 	// r using reduceName(jobName, mapTaskNumber, r). The ihash function (given
@@ -44,10 +43,8 @@ func doMap(
 	//
 	// Remember to close the file after you have written all the values!
 	
-	//separa dados da leitura
 	data, _ := ioutil.ReadFile(inFile)
 
-	// cria lista vazia de Json Encoders	
 	files := make([]*json.Encoder, 0)
 	
     for i := 0; i < nReduce; i++{
@@ -58,14 +55,12 @@ func doMap(
 
     }
 
-	//cria mapa com tamanho da lista de files e povoa o map
     filesArray:= make([][]KeyValue, len(files))
     kvPairs:= mapF(inFile, string(data))
     for _,keyValue := range kvPairs{
 		i := (int)(ihash(keyValue.Key))%nReduce
     	filesArray[i] = append(filesArray[i], keyValue)
     }
-	//usar encoder para json
     for i,keyValues := range filesArray{
     	enc := (files[i])
     	for _, kv := range keyValues {
